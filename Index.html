@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QuickShift RD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #1E88E5;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #1E88E5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .vehicle-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+        }
+        .vehicle-card {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .vehicle-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #1E88E5;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .dropdown {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>QuickShift RD</h1>
+        <p>El aliado idóneo para ellas</p>
+        <a href="#login" class="btn">Login</a> | <a href="#register" class="btn">Registro</a>
+    </header>
+
+    <div class="container">
+        <div id="login" class="section">
+            <h2>Login</h2>
+            <input type="email" id="loginEmail" placeholder="Correo Electrónico" />
+            <input type="password" id="loginPassword" placeholder="Contraseña" />
+            <button onclick="loginUser()">Iniciar sesión</button>
+        </div>
+
+        <div id="register" class="section">
+            <h2>Registro</h2>
+            <input type="text" id="registerName" placeholder="Nombre Completo" />
+            <input type="email" id="registerEmail" placeholder="Correo Electrónico" />
+            <input type="password" id="registerPassword" placeholder="Contraseña" />
+            <button onclick="registerUser()">Registrar</button>
+        </div>
+
+        <div class="filter-container">
+            <select class="dropdown" id="brandFilter" onchange="filterVehicles()">
+                <option value="">Marca</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Ford">Ford</option>
+            </select>
+            <select class="dropdown" id="modelFilter" onchange="filterVehicles()">
+                <option value="">Modelo</option>
+                <option value="Corolla">Corolla</option>
+                <option value="Civic">Civic</option>
+                <option value="Focus">Focus</option>
+            </select>
+        </div>
+
+        <div class="vehicle-gallery" id="vehicleGallery">
+            <!-- Cards de vehículos generados aquí -->
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 QuickShift RD</p>
+    </footer>
+
+    <script>
+        const vehicles = [
+            { title: "Toyota Corolla", price: "$15,000", brand: "Toyota", model: "Corolla", image: "https://via.placeholder.com/300", views: 0, clicks: 0 },
+            { title: "Honda Civic", price: "$14,500", brand: "Honda", model: "Civic", image: "https://via.placeholder.com/300", views: 0, clicks: 0 },
+            { title: "Ford Focus", price: "$12,000", brand: "Ford", model: "Focus", image: "https://via.placeholder.com/300", views: 0, clicks: 0 },
+        ];
+
+        function generateVehicleCards() {
+            const gallery = document.getElementById('vehicleGallery');
+            gallery.innerHTML = "";
+            vehicles.forEach(vehicle => {
+                const card = document.createElement('div');
+                card.className = 'vehicle-card';
+                card.innerHTML = `
+                    <img src="${vehicle.image}" alt="${vehicle.title}">
+                    <h3>${vehicle.title}</h3>
+                    <p>${vehicle.price}</p>
+                    <p>Marca: ${vehicle.brand}</p>
+                    <p>Modelo: ${vehicle.model}</p>
+                    <button onclick="viewVehicle(${vehicles.indexOf(vehicle)})">Ver detalles</button>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        function filterVehicles() {
+            const brand = document.getElementById('brandFilter').value;
+            const model = document.getElementById('modelFilter').value;
+            const filteredVehicles = vehicles.filter(vehicle => {
+                return (brand ? vehicle.brand === brand : true) && (model ? vehicle.model === model : true);
+            });
+            displayFilteredVehicles(filteredVehicles);
+        }
+
+        function displayFilteredVehicles(filteredVehicles) {
+            const gallery = document.getElementById('vehicleGallery');
+            gallery.innerHTML = "";
+            filteredVehicles.forEach(vehicle => {
+                const card = document.createElement('div');
+                card.className = 'vehicle-card';
+                card.innerHTML = `
+                    <img src="${vehicle.image}" alt="${vehicle.title}">
+                    <h3>${vehicle.title}</h3>
+                    <p>${vehicle.price}</p>
+                    <p>Marca: ${vehicle.brand}</p>
+                    <p>Modelo: ${vehicle.model}</p>
+                    <button onclick="viewVehicle(${vehicles.indexOf(vehicle)})">Ver detalles</button>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        function viewVehicle(index) {
+            vehicles[index].views += 1;
+            alert(`Vistas: ${vehicles[index].views}`);
+        }
+
+        function registerUser() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            alert(`Usuario registrado: ${name}`);
+        }
+
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            alert(`Usuario logueado: ${email}`);
+        }
+
+        // Inicializar los vehículos
+        generateVehicleCards();
+    </script>
+</body>
+</html>
